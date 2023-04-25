@@ -5,10 +5,11 @@ const ExpressError = require('./expressError');
 
 app.use(express.json());
 
+const USER_API = "https://api.github.com/users";
 
 async function getGithubData(req, res, next) {
   try {
-    const requests = req.body.developers.map(d => axios.get(`https://api.github.com/users/${d}`));
+    const requests = req.body.developers.map(dev => axios.get(`${USER_API}/${dev}`));
     const results = await Promise.all(requests);
     const out = results.map(r => ({ name: r.data.name, bio: r.data.bio }));
     req.githubData = out;
